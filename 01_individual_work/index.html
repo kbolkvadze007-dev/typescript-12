@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>საბანკო სისტემა — სესხის კალკულატორი</title>
+  <style>
+    :root {
+      --bg-page: #f6f3ee;
+      --bg-card: #fffdf9;
+      --bg-soft: #efe9df;
+      --text-main: #24211e;
+      --text-muted: #6c645b;
+      --accent: #8c5a3c;
+      --accent-dark: #6f452c;
+      --border: #e3dbd0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      padding: 40px 20px;
+      line-height: 1.5;
+    }
+
+    .wrapper {
+      max-width: 820px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px;
+      box-shadow: 0 12px 32px rgba(36, 33, 30, 0.05);
+    }
+
+    .badge {
+      display: inline-block;
+      background: var(--bg-soft);
+      color: var(--accent-dark);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 999px;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--text-main);
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 14px;
+      background: var(--bg-soft);
+      padding: 18px;
+      border-radius: 14px;
+      margin-bottom: 24px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .field input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--bg-card);
+      color: var(--text-main);
+      font-size: 14px;
+    }
+
+    .btn-row {
+      display: flex;
+      align-items: flex-end;
+    }
+
+    button {
+      width: 100%;
+      padding: 11px 16px;
+      border: none;
+      border-radius: 10px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    button:hover {
+      background: var(--accent-dark);
+    }
+
+    .summary {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 18px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .summary span {
+      background: var(--bg-page);
+      border: 1px solid var(--border);
+      padding: 6px 12px;
+      border-radius: 10px;
+    }
+
+    .summary strong {
+      color: var(--text-main);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      overflow: hidden;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    th, td {
+      padding: 12px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      background: var(--bg-soft);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--text-muted);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .hint {
+      margin-top: 18px;
+      font-size: 12.5px;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="card">
+      <div class="badge">სცენარი 1 · სტუდენტი 1</div>
+      <h1>სესხის კალკულატორი</h1>
+      <p class="subtitle">6-თვიანი გადახდის გრაფიკი TypeScript-ის მოდულის (`calculateLoanSchedule`) საფუძველზე</p>
+
+      <div class="controls">
+        <div class="field">
+          <label for="loanInput">სესხის თანხა (ლარი)</label>
+          <input type="number" id="loanInput" value="6000" min="100" step="100" />
+        </div>
+        <div class="field">
+          <label for="salaryInput">ყოველთვიური ხელფასი ($)</label>
+          <input type="number" id="salaryInput" value="2500" min="0" step="100" />
+        </div>
+        <div class="btn-row">
+          <button type="button" id="calcBtn">გრაფიკის გამოთვლა</button>
+        </div>
+      </div>
+
+      <div class="summary" id="summaryBar"></div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>თვე</th>
+            <th>ყოველთვიური</th>
+            <th>ძირი</th>
+            <th>პროცენტი</th>
+            <th>ნაშთი</th>
+          </tr>
+        </thead>
+        <tbody id="scheduleBody"></tbody>
+      </table>
+
+      <p class="hint">
+        გამოთვლები ასევე იბეჭდება ბრაუზერის კონსოლში (<strong>F12</strong> ან <strong>Cmd + Option + I → Console</strong>).
+      </p>
+    </div>
+  </div>
+
+  <script>var exports = {};</script>
+  <script src="./dist/loanCalculator.js"></script>
+  <script>
+    const loanInput = document.getElementById("loanInput");
+    const salaryInput = document.getElementById("salaryInput");
+    const calcBtn = document.getElementById("calcBtn");
+    const summaryBar = document.getElementById("summaryBar");
+    const scheduleBody = document.getElementById("scheduleBody");
+
+    function renderSchedule() {
+      const loanAmount = Math.max(0, Number(loanInput.value) || 0);
+      const salaryUsd = Math.max(0, Number(salaryInput.value) || 0);
+
+      const result = calculateLoanSchedule(loanAmount, salaryUsd, 6);
+
+      summaryBar.innerHTML = `
+        <span>წლიური განაკვეთი: <strong>${result.annualInterestRate}%</strong></span>
+        <span>სესხის თანხა: <strong>${result.loanAmount.toFixed(2)} ლარი</strong></span>
+        <span>ხელფასი: <strong>$${result.monthlySalaryUsd}</strong></span>
+      `;
+
+      scheduleBody.innerHTML = result.schedule
+        .map(
+          (row) => `
+            <tr>
+              <td>თვე ${row.month}</td>
+              <td><strong>${row.monthlyPayment.toFixed(2)} ლარი</strong></td>
+              <td>${row.principalAmount.toFixed(2)} ლარი</td>
+              <td>${row.interestAmount.toFixed(2)} ლარი</td>
+              <td>${row.remainingPrincipal.toFixed(2)} ლარი</td>
+            </tr>
+          `
+        )
+        .join("");
+    }
+
+    calcBtn.addEventListener("click", renderSchedule);
+    renderSchedule();
+  </script>
+</body>
+</html>

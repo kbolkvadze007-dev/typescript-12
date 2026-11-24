@@ -1,0 +1,14 @@
+{
+  "name": "loan-calculator-individual",
+  "version": "1.0.0",
+  "description": "სესხის კალკულატორი - სტუდენტი 1 (ინდივიდუალური სამუშაო)",
+  "main": "dist/loanCalculator.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc && node dist/loanCalculator.js",
+    "start": "tsc && node dist/loanCalculator.js"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
