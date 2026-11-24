@@ -5,4 +5,4 @@
 * **ჩემი როლი გუნდში:** სტუდენტი 1 - სესხის კალკულატორი (Loan Calculator)
 * **GitHub რეპოზიტორის ლინკი:** [(https://github.com/kbolkvadze007-dev/typescript-12)]
 * **ჩემი ინდივიდუალური Branch (მტო):** feature/loan-calculator
-* **ჩემი ბოლო Commit-ის ჰეში (Hash):** [ჩასვით თქვენი ბოლო commit-ის უნიკალური ჰეში]
+* **ჩემი ბოლო Commit-ის ჰეში (Hash):** [7b1de82865c3294a7836b4bce3a31e48416cde7a]
